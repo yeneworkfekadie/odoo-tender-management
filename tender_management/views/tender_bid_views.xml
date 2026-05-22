@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tender Bid Views -->
+    <record id="tender_bid_tree" model="ir.ui.view">
+        <field name="name">tender.bid.tree</field>
+        <field name="model">tender.bid</field>
+        <field name="arch" type="xml">
+            <tree string="Tender Bids" decoration-success="status=='selected'" decoration-danger="status=='disqualified'" decoration-warning="status=='submitted'">
+                <field name="bid_reference"/>
+                <field name="tender_id"/>
+                <field name="vendor_id"/>
+                <field name="status"/>
+                <field name="total_amount"/>
+                <field name="total_score"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="tender_bid_form" model="ir.ui.view">
+        <field name="name">tender.bid.form</field>
+        <field name="model">tender.bid</field>
+        <field name="arch" type="xml">
+            <form string="Tender Bid">
+                <header>
+                    <button name="action_submit" string="Submit Bid" type="object" states="draft" class="oe_highlight"/>
+                    <button name="action_qualify" string="Qualify" type="object" states="submitted" class="oe_highlight" groups="tender_management.group_tender_evaluator"/>
+                    <button name="action_disqualify" string="Disqualify" type="object" states="submitted" groups="tender_management.group_tender_evaluator"/>
+                    <button name="action_select" string="Select as Winner" type="object" states="qualified" class="oe_highlight" groups="tender_management.group_tender_approver"/>
+                    <button name="action_reject" string="Reject" type="object" states="qualified"/>
+                    <field name="status" widget="statusbar" statusbar_visible="draft,submitted,qualified,selected,rejected"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="tender_id"/>
+                            <field name="vendor_id"/>
+                            <field name="bid_reference" readonly="1"/>
+                            <field name="bid_date"/>
+                        </group>
+                        <group>
+                            <field name="delivery_period"/>
+                            <field name="warranty_period"/>
+                            <field name="total_amount" readonly="1" widget="monetary"/>
+                            <field name="currency_id"/>
+                        </group>
+                    </group>
+                    <group string="Evaluation Scores">
+                        <group>
+                            <field name="price_score"/>
+                            <field name="quality_score"/>
+                        </group>
+                        <group>
+                            <field name="delivery_score"/>
+                            <field name="technical_score"/>
+                            <field name="total_score" readonly="1" widget="progressbar"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Bid Items">
+                            <field name="bid_items" nolabel="1">
+                                <tree editable="bottom" decoration-muted="False">
+                                    <field name="product_id"/>
+                                    <field name="description"/>
+                                    <field name="quantity"/>
+                                    <field name="unit_id"/>
+                                    <field name="unit_price"/>
+                                    <field name="amount" readonly="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Payment & Terms">
+                            <field name="payment_terms" nolabel="1" placeholder="Enter payment terms..."/>
+                        </page>
+                        <page string="Remarks">
+                            <field name="remarks" nolabel="1" placeholder="Enter any additional remarks..."/>
+                        </page>
+                        <page string="Attachments">
+                            <field name="attachment_ids" nolabel="1" widget="many2many_binary"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="tender_bid_search" model="ir.ui.view">
+        <field name="name">tender.bid.search</field>
+        <field name="model">tender.bid</field>
+        <field name="arch" type="xml">
+            <search string="Tender Bid">
+                <field name="bid_reference"/>
+                <field name="tender_id"/>
+                <field name="vendor_id"/>
+                <separator/>
+                <filter name="draft" string="Draft" domain="[('status','=','draft')]"/>
+                <filter name="submitted" string="Submitted" domain="[('status','=','submitted')]"/>
+                <filter name="qualified" string="Qualified" domain="[('status','=','qualified')]"/>
+                <filter name="selected" string="Selected" domain="[('status','=','selected')]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_status" string="Status" context="{'group_by':'status'}"/>
+                    <filter name="group_by_tender" string="Tender" context="{'group_by':'tender_id'}"/>
+                    <filter name="group_by_vendor" string="Vendor" context="{'group_by':'vendor_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="tender_bid_action" model="ir.actions.act_window">
+        <field name="name">Tender Bids</field>
+        <field name="res_model">tender.bid</field>
+        <field name="view_mode">tree,form</field>
+    </record>

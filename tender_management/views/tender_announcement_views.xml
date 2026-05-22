@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tender Announcement Views -->
+    <record id="tender_announcement_tree" model="ir.ui.view">
+        <field name="name">tender.announcement.tree</field>
+        <field name="model">tender.announcement</field>
+        <field name="arch" type="xml">
+            <tree string="Tender Announcements" decoration-success="status=='awarded'" decoration-danger="status=='rejected'" decoration-info="status=='open'">
+                <field name="name"/>
+                <field name="tender_type"/>
+                <field name="status"/>
+                <field name="bid_start_date"/>
+                <field name="bid_end_date"/>
+                <field name="budget_amount"/>
+                <field name="bid_count"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="tender_announcement_form" model="ir.ui.view">
+        <field name="name">tender.announcement.form</field>
+        <field name="model">tender.announcement</field>
+        <field name="arch" type="xml">
+            <form string="Tender Announcement">
+                <header>
+                    <button name="action_publish" string="Publish" type="object" states="draft" class="oe_highlight"/>
+                    <button name="action_open_bidding" string="Open for Bidding" type="object" states="published" class="oe_highlight"/>
+                    <button name="action_close_bidding" string="Close Bidding" type="object" states="open" class="oe_highlight"/>
+                    <button name="action_accept" string="Award" type="object" states="closed" class="oe_highlight"/>
+                    <button name="action_reject" string="Reject" type="object" states="closed"/>
+                    <field name="status" widget="statusbar" statusbar_visible="draft,published,open,closed,awarded,rejected"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Tender Title"/>
+                        <h1><field name="name" placeholder="Enter tender title"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="tender_type"/>
+                            <field name="user_id"/>
+                            <field name="department_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="announcement_date" readonly="1"/>
+                            <field name="bid_start_date"/>
+                            <field name="bid_end_date"/>
+                            <field name="currency_id"/>
+                        </group>
+                    </group>
+                    <group string="Budget Information">
+                        <field name="budget_amount"/>
+                    </group>
+                    <group string="Description">
+                        <field name="description" nolabel="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Items">
+                            <field name="tender_items" nolabel="1" mode="tree">
+                                <tree editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="description"/>
+                                    <field name="quantity"/>
+                                    <field name="unit_id"/>
+                                    <field name="estimated_price"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Bids" name="bids">
+                            <field name="bid_ids" nolabel="1" readonly="1">
+                                <tree decoration-success="status=='selected'" decoration-danger="status=='disqualified'">
+                                    <field name="bid_reference"/>
+                                    <field name="vendor_id"/>
+                                    <field name="status"/>
+                                    <field name="total_amount"/>
+                                    <field name="total_score"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Approved Vendors">
+                            <field name="approved_vendor_ids" nolabel="1" widget="many2many_tags"/>
+                        </page>
+                        <page string="Attachments">
+                            <field name="attachment_ids" nolabel="1" widget="many2many_binary"/>
+                        </page>
+                        <page string="Internal Notes">
+                            <field name="notes" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="tender_announcement_search" model="ir.ui.view">
+        <field name="name">tender.announcement.search</field>
+        <field name="model">tender.announcement</field>
+        <field name="arch" type="xml">
+            <search string="Tender Announcement">
+                <field name="name" string="Tender Title"/>
+                <field name="user_id"/>
+                <field name="department_id"/>
+                <separator/>
+                <filter name="draft" string="Draft" domain="[('status','=','draft')]"/>
+                <filter name="published" string="Published" domain="[('status','=','published')]"/>
+                <filter name="open" string="Open for Bidding" domain="[('status','=','open')]"/>
+                <filter name="closed" string="Closed" domain="[('status','=','closed')]"/>
+                <filter name="awarded" string="Awarded" domain="[('status','=','awarded')]"/>
+                <separator/>
+                <filter name="active_tenders" string="Active Tenders" domain="[('status','in',['published','open'])]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_tender_type" string="Tender Type" domain="[]" context="{'group_by':'tender_type'}"/>
+                    <filter name="group_by_status" string="Status" domain="[]" context="{'group_by':'status'}"/>
+                    <filter name="group_by_user" string="Tender Manager" domain="[]" context="{'group_by':'user_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="tender_announcement_action" model="ir.actions.act_window">
+        <field name="name">Tender Announcements</field>
+        <field name="res_model">tender.announcement</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">Click to create a new tender announcement.</p>
+        </field>
+    </record>
