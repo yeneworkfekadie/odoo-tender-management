@@ -13,6 +13,8 @@
         'web',
     ],
     'data': [
+        'data/ir_sequence_data.xml',
+        'data/tender_data.xml',
         'security/security.xml',
         'security/ir.model.access.csv',
         'views/tender_announcement_views.xml',
