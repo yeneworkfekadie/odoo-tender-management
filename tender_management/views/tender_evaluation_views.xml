@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tender Evaluation Views -->
+    <record id="tender_evaluation_tree" model="ir.ui.view">
+        <field name="name">tender.evaluation.tree</field>
+        <field name="model">tender.evaluation</field>
+        <field name="arch" type="xml">
+            <tree string="Tender Evaluations" decoration-success="status=='completed'" decoration-info="status=='in_progress'">
+                <field name="tender_id"/>
+                <field name="evaluation_date"/>
+                <field name="status"/>
+                <field name="evaluator_id"/>
+                <field name="best_bid_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="tender_evaluation_form" model="ir.ui.view">
+        <field name="name">tender.evaluation.form</field>
+        <field name="model">tender.evaluation</field>
+        <field name="arch" type="xml">
+            <form string="Tender Evaluation">
+                <header>
+                    <button name="action_start_evaluation" string="Start Evaluation" type="object" states="draft" class="oe_highlight"/>
+                    <button name="action_complete_evaluation" string="Complete Evaluation" type="object" states="in_progress" class="oe_highlight"/>
+                    <button name="action_approve_evaluation" string="Approve" type="object" states="completed" class="oe_highlight" groups="tender_management.group_tender_approver"/>
+                    <field name="status" widget="statusbar" statusbar_visible="draft,in_progress,completed,approved"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="tender_id"/>
+                            <field name="evaluator_id"/>
+                            <field name="evaluation_date"/>
+                        </group>
+                        <group>
+                            <field name="best_bid_id"/>
+                            <field name="best_price_bid_id"/>
+                            <field name="winner_id"/>
+                        </group>
+                    </group>
+                    <group string="Evaluation Criteria" colspan="4">
+                        <group>
+                            <field name="price_weight"/>
+                            <field name="quality_weight"/>
+                        </group>
+                        <group>
+                            <field name="delivery_weight"/>
+                            <field name="technical_weight"/>
+                        </group>
+                    </group>
+                    <group string="Recommendation" colspan="4">
+                        <field name="recommendation" nolabel="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Evaluation Details">
+                            <field name="evaluation_lines" nolabel="1">
+                                <tree editable="bottom">
+                                    <field name="bid_id"/>
+                                    <field name="vendor_id"/>
+                                    <field name="price_score"/>
+                                    <field name="quality_score"/>
+                                    <field name="delivery_score"/>
+                                    <field name="technical_score"/>
+                                    <field name="weighted_score"/>
+                                    <field name="rank"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Notes">
+                            <field name="notes" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="tender_evaluation_action" model="ir.actions.act_window">
+        <field name="name">Tender Evaluations</field>
+        <field name="res_model">tender.evaluation</field>
+        <field name="view_mode">tree,form</field>
+    </record>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Menu Items -->
+    <menuitem id="menu_tender_root" name="Tender Management" web_icon="tender_management,static/description/icon.png" sequence="50"/>
+
+    <menuitem id="menu_tender_main" name="Tenders" parent="menu_tender_root" sequence="10"/>
+    <menuitem id="menu_tender_announcements" name="Tender Announcements" parent="menu_tender_main" action="tender_announcement_action" sequence="10"/>
+    <menuitem id="menu_tender_bids" name="Tender Bids" parent="menu_tender_main" action="tender_bid_action" sequence="20"/>
+
+    <menuitem id="menu_tender_evaluation" name="Evaluation" parent="menu_tender_root" sequence="20"/>
+    <menuitem id="menu_tender_evaluations" name="Evaluations" parent="menu_tender_evaluation" action="tender_evaluation_action" sequence="10"/>
+    <menuitem id="menu_tender_approvals" name="Approvals" parent="menu_tender_evaluation" action="tender_approval_action" sequence="20"/>
+
+    <menuitem id="menu_tender_management" name="Vendor Management" parent="menu_tender_root" sequence="30"/>
+    <menuitem id="menu_tender_vendors" name="Vendors" parent="menu_tender_management" action="tender_vendor_action" sequence="10"/>
+
+</odoo>
