@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tender Report Template -->
+    <record id="tender_report_action" model="ir.actions.report">
+        <field name="name">Tender Report</field>
+        <field name="model">tender.announcement</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">tender_management.tender_report_template</field>
+        <field name="binding_model_id" ref="model_tender_announcement"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- Bid Comparison Report -->
+    <record id="bid_comparison_report_action" model="ir.actions.report">
+        <field name="name">Bid Comparison Report</field>
+        <field name="model">tender.announcement</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">tender_management.bid_comparison_report_template</field>
+        <field name="binding_model_id" ref="model_tender_announcement"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- Evaluation Report -->
+    <record id="evaluation_report_action" model="ir.actions.report">
+        <field name="name">Evaluation Report</field>
+        <field name="model">tender.evaluation</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">tender_management.evaluation_report_template</field>
+        <field name="binding_model_id" ref="model_tender_evaluation"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- Vendor Performance Report -->
+    <record id="vendor_performance_report_action" model="ir.actions.report">
+        <field name="name">Vendor Performance Report</field>
+        <field name="model">tender.vendor</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">tender_management.vendor_performance_report_template</field>
+        <field name="binding_model_id" ref="model_tender_vendor"/>
+        <field name="binding_type">report</field>
+    </record>
+
+</odoo>
