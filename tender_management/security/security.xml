@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tender Management Groups -->
+    <record id="group_tender_user" model="res.groups">
+        <field name="name">Tender User</field>
+        <field name="category_id" ref="base.module_category_purchase"/>
+    </record>
+
+    <record id="group_tender_manager" model="res.groups">
+        <field name="name">Tender Manager</field>
+        <field name="category_id" ref="base.module_category_purchase"/>
+        <field name="implied_ids" eval="[(4, ref('group_tender_user'))]" />
+    </record>
+
+    <record id="group_tender_evaluator" model="res.groups">
+        <field name="name">Tender Evaluator</field>
+        <field name="category_id" ref="base.module_category_purchase"/>
+        <field name="implied_ids" eval="[(4, ref('group_tender_user'))]" />
+    </record>
+
+    <record id="group_tender_approver" model="res.groups">
+        <field name="name">Tender Approver</field>
+        <field name="category_id" ref="base.module_category_purchase"/>
+        <field name="implied_ids" eval="[(4, ref('group_tender_manager'))]" />
+    </record>
+
+    <!-- Record Rules -->
+    <!-- Tender Users can only see their own tenders -->
+    <record id="tender_announcement_rule_user" model="ir.rule">
+        <field name="name">Tender User: Own Tenders</field>
+        <field name="model_id" ref="model_tender_announcement"/>
+        <field name="groups" eval="[(4, ref('group_tender_user'))]" />
+        <field name="arch">['|',('user_id','=',user.id),('company_id.id','in',user.company_ids.ids)]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!-- Tender Managers can create and manage tenders -->
+    <record id="tender_announcement_rule_manager" model="ir.rule">
+        <field name="name">Tender Manager: Full Access</field>
+        <field name="model_id" ref="model_tender_announcement"/>
+        <field name="groups" eval="[(4, ref('group_tender_manager'))]" />
+        <field name="arch">[('company_id.id','in',user.company_ids.ids)]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <!-- Tender Evaluators can evaluate bids -->
+    <record id="tender_bid_rule_evaluator" model="ir.rule">
+        <field name="name">Tender Evaluator: Evaluate Bids</field>
+        <field name="model_id" ref="model_tender_bid"/>
+        <field name="groups" eval="[(4, ref('group_tender_evaluator'))]" />
+        <field name="arch">[('tender_id.company_id.id','in',user.company_ids.ids)]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!-- Tender Approvers can approve tenders -->
+    <record id="tender_approval_rule_approver" model="ir.rule">
+        <field name="name">Tender Approver: Full Access</field>
+        <field name="model_id" ref="model_tender_approval"/>
+        <field name="groups" eval="[(4, ref('group_tender_approver'))]" />
+        <field name="arch">[('company_id.id','in',user.company_ids.ids)]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <!-- Vendor Management Rules -->
+    <record id="tender_vendor_rule" model="ir.rule">
+        <field name="name">Tender Vendor: Company Access</field>
+        <field name="model_id" ref="model_tender_vendor"/>
+        <field name="arch">[('partner_id.company_id','=',False)]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+</odoo>

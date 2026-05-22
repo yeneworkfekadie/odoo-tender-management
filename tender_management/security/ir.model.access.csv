@@ -1,0 +1,18 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_tender_announcement_user,Tender Announcement User,model_tender_announcement,group_tender_user,1,0,0,0
+access_tender_announcement_manager,Tender Announcement Manager,model_tender_announcement,group_tender_manager,1,1,1,1
+access_tender_bid_user,Tender Bid User,model_tender_bid,group_tender_user,1,0,0,0
+access_tender_bid_manager,Tender Bid Manager,model_tender_bid,group_tender_manager,1,1,1,0
+access_tender_bid_evaluator,Tender Bid Evaluator,model_tender_bid,group_tender_evaluator,1,1,0,0
+access_tender_vendor_user,Tender Vendor User,model_tender_vendor,group_tender_user,1,0,0,0
+access_tender_vendor_manager,Tender Vendor Manager,model_tender_vendor,group_tender_manager,1,1,1,0
+access_tender_evaluation_user,Tender Evaluation User,model_tender_evaluation,group_tender_user,1,0,0,0
+access_tender_evaluation_evaluator,Tender Evaluation Evaluator,model_tender_evaluation,group_tender_evaluator,1,1,1,0
+access_tender_evaluation_approver,Tender Evaluation Approver,model_tender_evaluation,group_tender_approver,1,1,1,0
+access_tender_approval_manager,Tender Approval Manager,model_tender_approval,group_tender_manager,1,1,1,1
+access_tender_approval_approver,Tender Approval Approver,model_tender_approval,group_tender_approver,1,1,1,1
+access_tender_item_user,Tender Item User,model_tender_item,group_tender_user,1,0,0,0
+access_tender_item_manager,Tender Item Manager,model_tender_item,group_tender_manager,1,1,1,1
+access_tender_bid_item_manager,Tender Bid Item Manager,model_tender_bid_item,group_tender_manager,1,1,1,1
+access_tender_certification_user,Tender Certification User,model_tender_certification,group_tender_user,1,0,0,0
+access_tender_certification_manager,Tender Certification Manager,model_tender_certification,group_tender_manager,1,1,1,1
